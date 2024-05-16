@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from secret_vars import CLIENT_ID, CLIENT_SECRET, AUTHORITY, RESOURCE, SITE_ID, DOCUMENT_LIBRARY_ID
-from content_generation import get_graph_access_token
+from content_generation import get_graph_access_token, DownloadFile
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
@@ -13,6 +13,16 @@ def index():
 
        
         access_token = get_graph_access_token(CLIENT_ID, CLIENT_SECRET, AUTHORITY)
+
+
+        if not access_token:
+            return "Failed to acquire access token."
+
+        DownloadFile('Licensee.xlsx', access_token, SITE_ID, DOCUMENT_LIBRARY_ID, RESOURCE)
+
+
+
+
 
 
         return "Process completed successfully!"
