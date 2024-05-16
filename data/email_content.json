@@ -1,0 +1,14 @@
+{
+    "ErrorWithAccessToken" : {
+        "title": "Error with Access Token",
+        "message": "There was an error when requesting an access token, a request hs not gone through properly."
+    },
+    "UnauthorisedEmail": {
+        "title": "Un-Authorised Request",
+        "message": "Thank you for your content request but, unfortunately, we are unable to process it as the details you have provided do not match those in our system.\\n\\nAs stated on our web-site and on our request form, we will only accept requests for content from our library from authorised users.\\n\\nIf your organisation is not registered it may do so by following the instruction here: https://digital.nhs.uk/services/national-clinical-content-repository-copyright-licensing-service#how-to-register-with-the-copyright-licensing-service. \\n\\nIf your organisation is already register however you have received this email, your email is not registered as an authorised user to request from our library. Please contact an authorised individual from your organisation, they will be able to request content on your behalf.\\n\\nIf there are any further issues please contact ‘clin.licences@nhs.net’.\\n\\nKind regards,\\n\\nNHS Licensing team"
+    },
+    "RequestedContent": {
+        "title": "Requested Content",
+        "message": "Thank you for your request for content from the NHS Library.\\n\\nAttached you will find your requested documents\\n\\nKind regards,\\nNHS Licensing Team"
+    }
+}

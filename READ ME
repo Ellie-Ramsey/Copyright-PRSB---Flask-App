@@ -1,0 +1,6 @@
+Flask App for the automation of the NHS Licensing Service
+=======================================================
+
+
+Current Steps:
+- Transferring functions from original script to Flask App

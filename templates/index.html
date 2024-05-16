@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copyright Automation</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Submit Form</h1>
+        <form method="post">
+            <div class="form-group">
+                <label for="userID">User ID:</label>
+                <input type="text" class="form-control" id="userID" name="userID">
+            </div>
+            
+            <div class="form-group">
+                <label for="userEmail">User Email:</label>
+                <input type="email" class="form-control" id="userEmail" name="userEmail">
+            </div>
+            
+            <div class="form-group">
+                <label for="userName">User Name:</label>
+                <input type="text" class="form-control" id="userName" name="userName">
+            </div>
+            
+            <div class="form-group">
+                <label>Documents to Search:</label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="Adult Carer Quality of Life (AC-QoL)" name="documents_to_search" value="Adult Carer Quality of Life (AC-QoL)">
+                    <label class="form-check-label" for="Adult Carer Quality of Life (AC-QoL)">Adult Carer Quality of Life (AC-QoL)</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="Binge Eating Scale (BES)" name="documents_to_search" value="Binge Eating Scale (BES)">
+                    <label class="form-check-label" for="Binge Eating Scale (BES)">Binge Eating Scale (BES)</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="Clinical Frailty Scale (CFS)" name="documents_to_search" value="Clinical Frailty Scale (CFS)">
+                    <label class="form-check-label" for="Clinical Frailty Scale (CFS)">Clinical Frailty Scale (CFS)</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="Recovering Quality of Life Questionnaire (ReQoL)" name="documents_to_search" value="Recovering Quality of Life Questionnaire (ReQoL)">
+                    <label class="form-check-label" for="Recovering Quality of Life Questionnaire (ReQoL)">Recovering Quality of Life Questionnaire (ReQoL)</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="Strengths and Difficulties Questionnaire (SDQ)" name="documents_to_search" value="Strengths and Difficulties Questionnaire (SDQ)">
+                    <label class="form-check-label" for="Strengths and Difficulties Questionnaire (SDQ)">Strengths and Difficulties Questionnaire (SDQ)</label>
+                </div>
+            </div>            
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS (optional, if you need JavaScript features) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
