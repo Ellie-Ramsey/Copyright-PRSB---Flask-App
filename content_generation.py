@@ -71,3 +71,41 @@ def fetch_sharepoint_document_by_item_id(file_name, access_token, item_id, RESOU
             file.write(response.content)
     else:
         print(f"Error fetching SharePoint document by item ID: {response.text}")
+
+
+# CHECK FOR AUTHORISED USER FUNCTION: Returns either True or False
+def checkAuthorisation(userEmail, userID):
+    doc_path = "downloadedFiles/Licensee.xlsx"
+
+    wb = load_workbook(doc_path)
+    ws = wb["IDs"]
+
+    id_found = False
+    email_matches = False
+
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        print("")
+        print("Row 7 for ID: " + str(row[7]))
+        print("Row 10: '" + str(row[10]) + "' and Row 19: '" + str(row[19]) + "'")
+
+        if userID == row[7]:
+            id_found = True
+            print("ID found!")
+            
+            for email in row[19].split('\n'):
+                email = email.strip()
+                if userEmail == email:
+                    print("Email matches!")
+                    email_matches = True
+                    break 
+
+            if email_matches:
+                break
+
+
+    wb.close()
+
+    if id_found and email_matches:
+        return True
+    else:
+        return False
