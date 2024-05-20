@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from main_functions import content_generation
 
 app = Flask(__name__)
@@ -13,7 +13,7 @@ def index():
        
         value = content_generation(user_id, user_email, user_name, documents_to_search)
 
-        return value
+        return jsonify({'message': 'Form submitted successfully!', 'value': value})
 
     return render_template('index.html')
 

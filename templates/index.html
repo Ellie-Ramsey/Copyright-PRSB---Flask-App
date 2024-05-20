@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Copyright Automation</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        #loadingSpinner {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
         <h1 class="mb-4">Submit Form</h1>
-        <form method="post">
+        <form id="myForm">
             <div class="form-group">
                 <label for="userID">User ID:</label>
                 <input type="text" class="form-control" id="userID" name="userID">
@@ -48,13 +53,47 @@
                     <label class="form-check-label" for="Strengths and Difficulties Questionnaire (SDQ)">Strengths and Difficulties Questionnaire (SDQ)</label>
                 </div>
             </div>            
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
+            <div id="loadingSpinner" class="spinner-border text-primary ml-2" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
         </form>
+        <div id="resultMessage" class="mt-4"></div>
     </div>
 
     <!-- Bootstrap JS (optional, if you need JavaScript features) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <script>
+        $(document).ready(function(){
+            $('#myForm').on('submit', function(event){
+                event.preventDefault();
+                
+                // Disable the submit button and show the loading spinner
+                $('#submitButton').prop('disabled', true);
+                $('#loadingSpinner').show();
+                
+                $.ajax({
+                    url: '/',
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response){
+                        $('#resultMessage').html('<div class="alert alert-success">' + response.message + '</div>');
+                        // Enable the submit button and hide the loading spinner
+                        $('#submitButton').prop('disabled', false);
+                        $('#loadingSpinner').hide();
+                    },
+                    error: function(){
+                        $('#resultMessage').html('<div class="alert alert-danger">There was an error submitting the form.</div>');
+                        // Enable the submit button and hide the loading spinner
+                        $('#submitButton').prop('disabled', false);
+                        $('#loadingSpinner').hide();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
