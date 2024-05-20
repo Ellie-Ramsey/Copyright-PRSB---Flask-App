@@ -41,15 +41,6 @@ def Plain_Email_Draft(email_type, access_token, userEmail):
     else:
         print(f"Failed to create draft email: {response.text}")
 
-
-
-
-
-
-
-
-
-
 # RETURNS SIZE OF FILE IN MB
 def get_file_size(file_path):
     """Returns the size of the file in megabytes."""

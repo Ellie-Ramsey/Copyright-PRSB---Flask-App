@@ -78,15 +78,10 @@ def index():
 
         Attachment_Email_Draft('RequestedContent', files, access_token, user_email)
 
-        # for file_name in os.listdir('downloadedFiles'):
-        #     file_path = os.path.join('downloadedFiles', file_name)
-        #     if os.path.isfile(file_path):
-        #         os.remove(file_path)
-
-
-
-
-
+        for file_name in os.listdir('downloadedFiles'):
+            file_path = os.path.join('downloadedFiles', file_name)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
 
 
         return "Process completed successfully!"
