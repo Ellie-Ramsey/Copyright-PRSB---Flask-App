@@ -277,3 +277,31 @@ def WordEditingCode(userID, inputName):
     # Save the document with a new name
     modified_doc_path = "downloadedFiles/" + userID + inputName
     doc.save(modified_doc_path)
+
+# UPLOAD FILE TO SHAREPOINT FUNCTION: Uploads a file to SharePoint
+def upload_file_to_sharepoint(access_token, folder_path, local_file_path, SITE_ID, DOCUMENT_LIBRARY_ID):
+
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/octet-stream"
+    }
+
+    # Extract the file name from the local file path
+    file_name = os.path.basename(local_file_path)
+    
+    # Construct the API URL to upload the file
+    upload_url = f"https://graph.microsoft.com/v1.0/sites/{SITE_ID}/drives/{DOCUMENT_LIBRARY_ID}/root:/{folder_path}/{file_name}:/content"
+
+    # Read the file content to be uploaded
+    with open(local_file_path, 'rb') as file:
+        file_content = file.read()
+    
+    # Make the PUT request to upload the file
+    response = requests.put(upload_url, headers=headers, data=file_content)
+
+    if response.status_code in [200, 201, 202]:
+        print(f"Sub - File '{file_name}' uploaded successfully.")
+        return response.json()
+    else:
+        print(f"Error uploading file: {response.status_code}, {response.text}")
+        return None

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from secret_vars import CLIENT_ID, CLIENT_SECRET, AUTHORITY, RESOURCE, SITE_ID, DOCUMENT_LIBRARY_ID
-from content_generation import get_graph_access_token, DownloadFile, checkAuthorisation, checkUnrequestedDocuments, saveAudit, WordEditingCode
+from content_generation import get_graph_access_token, DownloadFile, checkAuthorisation, checkUnrequestedDocuments, saveAudit, WordEditingCode, upload_file_to_sharepoint
 import os, json
 
 app = Flask(__name__)
@@ -40,6 +40,43 @@ def index():
             if file_name.endswith('.docx'):
                 WordEditingCode(user_id, file_name)
                 os.remove('downloadedFiles/' + file_name)
+
+
+        for file_name in os.listdir('downloadedFiles'):
+            if file_name.endswith('.docx'):
+                
+                nhs_index = file_name.find('NHS')
+                if nhs_index != -1:
+                    original_file_name = file_name[nhs_index:-5]
+
+                    for key, value in content_names.items():
+                        if value == original_file_name:
+                            content_name = key
+                            break
+
+                upload_result = upload_file_to_sharepoint(access_token, "Permissions/Completed/" + content_name + "/Sub-Licenses Granted", "downloadedFiles/" + file_name, SITE_ID, DOCUMENT_LIBRARY_ID)
+
+
+        upload_result = upload_file_to_sharepoint(access_token, "Licensees" , "downloadedFiles/Licensee.xlsx", SITE_ID, DOCUMENT_LIBRARY_ID)
+        os.remove('downloadedFiles/Licensee.xlsx')
+
+        documents_found = [user_id + content_names[book] for book in documents_found]
+
+        special = False
+        for document in documents_found:
+            print("Downloading: ", document)
+            DownloadFile(document + ".docx", access_token, SITE_ID, DOCUMENT_LIBRARY_ID, RESOURCE)
+
+            if document == "NHS England Sub-Licence - Content Specific Terms A_ReQoL_10" or "NHS England Sub-Licence - Content Specific Terms A_ReQoL_20" and special == False:
+                special = True
+                DownloadFile("ReQoL - Important Notes.pdf", access_token, SITE_ID, DOCUMENT_LIBRARY_ID, RESOURCE)
+
+
+
+
+
+
+
 
 
 
