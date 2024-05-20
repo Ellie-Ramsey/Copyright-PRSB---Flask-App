@@ -1,7 +1,9 @@
 Flask App for the automation of the NHS Licensing Service
 =======================================================
-ReQol Issue: Due to this sharepoint download issue
 
 Current Steps:
-- Switch Audit to only upload if documents have been created
-- Remove SDQ from the list if requested
+- Add Off and On option
+
+
+- Add log for triggering + behaviour 
+- Add email inbox checking

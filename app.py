@@ -32,6 +32,15 @@ def index():
 
         documents_found, documents_to_search = checkUnrequestedDocuments(documents_to_search, user_id)
 
+        Nigel_Required = False
+        for document in documents_to_search:
+            if document == "Strengths and Difficulties Questionnaire (SDQ)":
+                Nigel_Required = True
+                documents_to_search.remove(document)
+                print("Main - IMPORTANT: Nigel Specific Document Required")
+                print("Main - Updated douments NOT Previously Requested: ", documents_to_search)
+                break
+
         saveAudit(user_id, documents_to_search, user_email, user_name)
 
         for document in documents_to_search:
@@ -58,7 +67,11 @@ def index():
                 upload_result = upload_file_to_sharepoint(access_token, "Permissions/Completed/" + content_name + "/Sub-Licenses Granted", "downloadedFiles/" + file_name, SITE_ID, DOCUMENT_LIBRARY_ID)
 
 
-        upload_result = upload_file_to_sharepoint(access_token, "Licensees" , "downloadedFiles/Licensee.xlsx", SITE_ID, DOCUMENT_LIBRARY_ID)
+        if documents_to_search:
+            print("Main - Audit was uploaded")
+            upload_result = upload_file_to_sharepoint(access_token, "Licensees" , "downloadedFiles/Licensee.xlsx", SITE_ID, DOCUMENT_LIBRARY_ID)
+        else:
+            print("Main - Audit was not uploaded")
         os.remove('downloadedFiles/Licensee.xlsx')
 
         documents_found = [user_id + content_names[book] for book in documents_found]
