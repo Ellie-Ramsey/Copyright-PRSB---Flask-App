@@ -183,3 +183,56 @@ def saveAudit(userID, documents_found, userEmail, userName):
 
     wb.save(doc_path)
     wb.close()
+
+
+
+
+
+# FILE DOWNLOAD: master function to download a file from SharePoint
+def DownloadFile(file_name, access_token, SITE_ID, DOCUMENT_LIBRARY_ID, RESOURCE):
+    document_id = search_for_document(access_token, file_name, SITE_ID, DOCUMENT_LIBRARY_ID)
+    
+    if document_id:
+        fetch_sharepoint_document_by_item_id(file_name, access_token, document_id, SITE_ID, DOCUMENT_LIBRARY_ID, RESOURCE)
+
+#  SEARCH FOR DOCUMENT BY NAME: returns the document ID if found, or None if not found.
+def search_for_document(access_token, file_name, SITE_ID, DOCUMENT_LIBRARY_ID):
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json"
+    }
+
+    # URL encode the file name to handle spaces and special characters
+    encoded_file_name = urllib.parse.quote(file_name)
+    url = f"https://graph.microsoft.com/v1.0/sites/{SITE_ID}/drives/{DOCUMENT_LIBRARY_ID}/root/search(q='{encoded_file_name}')"
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        items = response.json().get('value', [])
+        for item in items:
+            if item['name'] == file_name:
+                return item['id']
+    else:
+        return None
+
+# ACCESS SHAREPOINT CODE: This function fetches a document from SharePoint using the item ID.
+def fetch_sharepoint_document_by_item_id(file_name, access_token, item_id, SITE_ID, DOCUMENT_LIBRARY_ID, RESOURCE):
+    folder_path = 'downloadedFiles'
+
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
+    file_path = os.path.join(folder_path, file_name)
+
+    headers = {
+        "Authorization": f"Bearer {access_token}"
+    }
+
+    url = f"{RESOURCE}/sites/{SITE_ID}/drives/{DOCUMENT_LIBRARY_ID}/items/{item_id}/content"
+    response = requests.get(url, headers=headers, allow_redirects=True)
+
+    if response.status_code == 200:
+        with open(file_path, 'wb') as file:
+            file.write(response.content)
+    else:
+        print(f"Error fetching SharePoint document by item ID: {response.text}")
