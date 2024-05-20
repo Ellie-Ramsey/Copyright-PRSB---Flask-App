@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from secret_vars import CLIENT_ID, CLIENT_SECRET, AUTHORITY, RESOURCE, SITE_ID, DOCUMENT_LIBRARY_ID
-from content_generation import get_graph_access_token, DownloadFile, checkAuthorisation, checkUnrequestedDocuments, saveAudit
+from content_generation import get_graph_access_token, DownloadFile, checkAuthorisation, checkUnrequestedDocuments, saveAudit, WordEditingCode
 import os, json
 
 app = Flask(__name__)
@@ -36,8 +36,10 @@ def index():
         for document in documents_to_search:
             DownloadFile(content_names[document] + ".docx", access_token, SITE_ID, DOCUMENT_LIBRARY_ID, RESOURCE)
 
-
-
+        for file_name in os.listdir('downloadedFiles'):
+            if file_name.endswith('.docx'):
+                WordEditingCode(user_id, file_name)
+                os.remove('downloadedFiles/' + file_name)
 
 
 

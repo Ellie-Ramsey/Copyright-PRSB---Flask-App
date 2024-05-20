@@ -184,10 +184,6 @@ def saveAudit(userID, documents_found, userEmail, userName):
     wb.save(doc_path)
     wb.close()
 
-
-
-
-
 # FILE DOWNLOAD: master function to download a file from SharePoint
 def DownloadFile(file_name, access_token, SITE_ID, DOCUMENT_LIBRARY_ID, RESOURCE):
     document_id = search_for_document(access_token, file_name, SITE_ID, DOCUMENT_LIBRARY_ID)
@@ -236,3 +232,48 @@ def fetch_sharepoint_document_by_item_id(file_name, access_token, item_id, SITE_
             file.write(response.content)
     else:
         print(f"Error fetching SharePoint document by item ID: {response.text}")
+
+#  GET DATE TIME FUNCTION: Returns the current date and time
+def get_date_with_suffix(date):
+    # Get day, month name, and year
+    day = date.day
+    month_name = date.strftime('%B')
+    year = date.year
+    # Determine suffix
+    if 4 <= day <= 20 or 24 <= day <= 30:
+        suffix = "th"
+    else:
+        suffix = ["st", "nd", "rd"][day % 10 - 1]
+    return f"{day}{suffix} {month_name} {year}"
+
+# FETCH BOOK CODE: saves an edited Word File
+def WordEditingCode(userID, inputName):
+    doc_path = "downloadedFiles/" + inputName
+    doc = Document(doc_path)
+
+    current_date = datetime.now()
+    formatted_date = get_date_with_suffix(current_date)
+
+    for para in doc.paragraphs:
+        if para.text.startswith("Only for use by Licensing Service ID user:"):
+            new_text = para.text + " " + userID 
+            
+            p_runs = len(para.runs)
+            for i in range(p_runs):
+                para.runs[0].clear()
+            
+            para.add_run(new_text)
+
+        if "Date of Issue:" in para.text:
+            text_to_keep = para.text.split('Date of Issue:')[0] + 'Date of Issue:'
+            
+            p_runs = len(para.runs)
+            for i in range(p_runs):
+                para.runs[0].clear()
+            
+            para.add_run(text_to_keep + " " + formatted_date)
+
+
+    # Save the document with a new name
+    modified_doc_path = "downloadedFiles/" + userID + inputName
+    doc.save(modified_doc_path)
