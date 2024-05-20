@@ -22,7 +22,6 @@ def get_graph_access_token(CLIENT_ID, CLIENT_SECRET,AUTHORITY):
         print(f"Error acquiring Graph access token: {response.text}")
         return None
 
-
 # FILE DOWNLOAD: master function to download a file from SharePoint
 def DownloadFile(file_name, access_token, SITE_ID, DOCUMENT_LIBRARY_ID, RESOURCE):
     document_id = search_for_document(access_token, file_name, SITE_ID, DOCUMENT_LIBRARY_ID)
@@ -72,7 +71,6 @@ def fetch_sharepoint_document_by_item_id(file_name, access_token, item_id, RESOU
     else:
         print(f"Error fetching SharePoint document by item ID: {response.text}")
 
-
 # CHECK FOR AUTHORISED USER FUNCTION: Returns either True or False
 def checkAuthorisation(userEmail, userID):
     doc_path = "downloadedFiles/Licensee.xlsx"
@@ -109,3 +107,79 @@ def checkAuthorisation(userEmail, userID):
         return True
     else:
         return False
+
+# CHECK THE LIST FOR WHICH documents HAVE ALREADY BEEN REQUESTED: Returns a list of documents that have been found and a list of documents that have not been found
+def checkUnrequestedDocuments(documents_to_search, userID):
+    doc_path = "downloadedFiles/Licensee.xlsx"
+
+    # Load the workbook
+    wb = load_workbook(doc_path)
+
+    # Load the specific worksheet named 'Content Licensed'
+    ws = wb["Content Licensed"]
+
+    id_found = False
+    documents_found = []
+
+    # Iterate through rows in the 'Content Licensed' worksheet
+    for row in ws.iter_rows(values_only=True):
+        if userID in row:
+            id_found = True
+            for book in documents_to_search:
+                if book in row:
+                    documents_found.append(book)
+                    documents_to_search.remove(book)
+
+    wb.close()
+
+    return documents_found, documents_to_search
+
+# CHECK THE LIST FOR WHICH documents HAVE ALREADY BEEN REQUESTED: Returns a list of documents that have been found and a list of documents that have not been found
+def checkUnrequestedDocuments(documents_to_search, userID):
+    doc_path = "downloadedFiles/Licensee.xlsx"
+
+    # Load the workbook
+    wb = load_workbook(doc_path)
+
+    # Load the specific worksheet named 'Content Licensed'
+    ws = wb["Content Licensed"]
+
+    id_found = False
+    documents_found = []
+
+    # Iterate through rows in the 'Content Licensed' worksheet
+    for row in ws.iter_rows(values_only=True):
+        if userID in row:
+            id_found = True
+            for book in documents_to_search:
+                if book in row:
+                    documents_found.append(book)
+                    documents_to_search.remove(book)
+
+    wb.close()
+
+    return documents_found, documents_to_search
+
+# SAVE AUDIT FUNCTION: Saves the audit of the books that have been requested
+def find_first_empty_row(ws, max_check_row=1000):
+    for row in range(1, max_check_row + 1):
+        if all(ws[row][col].value is None for col in range(ws.max_column)):
+            return row
+    return ws.max_row + 1  # Default to appending after the last row if no empty row is found
+
+def saveAudit(userID, documents_found, userEmail, userName):
+    doc_path = "downloadedFiles/Licensee.xlsx"
+    wb = load_workbook(doc_path)
+    ws = wb["Content Licensed"]
+
+    start_row = find_first_empty_row(ws)
+    current_date = datetime.now().date()
+    formatted_date = current_date.strftime('%m/%d/%Y') 
+
+    for i, document in enumerate(documents_found, start=start_row):
+        data = [document, userID, userName, userEmail, formatted_date]
+        for j, value in enumerate(data, start=1):
+            ws.cell(row=i, column=j).value = value
+
+    wb.save(doc_path)
+    wb.close()
