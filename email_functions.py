@@ -83,9 +83,9 @@ def encode_attachment(file_path):
         return base64.b64encode(f.read()).decode()
 
 # DRAFT EMAIL FUNCTION: Creates a draft email with attachments
-def Attachment_Email_Draft(email_type, files, access_token):
+def Attachment_Email_Draft(email_type, files, access_token, userEmail):
     # Read JSON data from file
-    with open('email_content.json', 'r') as file:
+    with open('data/email_content.json', 'r') as file:
         email_contents = json.load(file)
 
     # Extract email subject and message based on email_type

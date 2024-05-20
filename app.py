@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from secret_vars import CLIENT_ID, CLIENT_SECRET, AUTHORITY, RESOURCE, SITE_ID, DOCUMENT_LIBRARY_ID
 from content_generation import get_graph_access_token, DownloadFile, checkAuthorisation, checkUnrequestedDocuments, saveAudit, WordEditingCode, upload_file_to_sharepoint
-from email_functions import Plain_Email_Draft
+from email_functions import Plain_Email_Draft, Attachment_Email_Draft
 import os, json
 
 app = Flask(__name__)
@@ -76,12 +76,12 @@ def index():
 
         files = [os.path.join('downloadedFiles', file_name) for file_name in os.listdir('downloadedFiles')]
 
-        # Attachment_Email_Draft('RequestedContent', files, access_token)
+        Attachment_Email_Draft('RequestedContent', files, access_token, user_email)
 
-        for file_name in os.listdir('downloadedFiles'):
-            file_path = os.path.join('downloadedFiles', file_name)
-            if os.path.isfile(file_path):
-                os.remove(file_path)
+        # for file_name in os.listdir('downloadedFiles'):
+        #     file_path = os.path.join('downloadedFiles', file_name)
+        #     if os.path.isfile(file_path):
+        #         os.remove(file_path)
 
 
 
