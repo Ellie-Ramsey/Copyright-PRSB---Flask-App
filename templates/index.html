@@ -3,18 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Copyright Automation</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        #loadingSpinner {
-            display: none;
-            margin-left: 10px;
-        }
-    </style>
+    <title>Copyright Licensing Service Automation</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="mb-4">Submit Form</h1>
+
+    <div class="header">
+        <img src="https://via.placeholder.com/50" alt="NHS Logo">
+        <img src="https://via.placeholder.com/50" alt="PRSB Logo">
+        <h1>Copyright Licensing Service Automation</h1>
+    </div>
+
+<div class="main-content">
+
+    <div class="notice-area">
+        <h2>Notices</h2>
+        <ul>
+            <li>When automation is triggered it will draft mail but not send it.</li>
+        </ul>
+    </div>
+
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="status-box">
+                <h2>Automation Status</h2>
+
+                
+                <!-- <div class="status-active">Active</div>
+                 -->
+                 <button type="" id="" class="btn btn-primary">Submit</button>
+
+
+
+                <p><strong>Reminder:</strong> When paused the automation will not be triggered by content requests received. Once activated the automation will crawl the inbox for any emails with the title ‘Content Request’, please move any email you do not wish to be crawled from the inbox into the subfolder ‘Holding Emails’.</p>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="log-box">
+                <h2>Activity Log</h2>
+                <ul>
+                    <li>No current logs</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container seperator">
+        <img src="https://via.placeholder.com/20" alt="Footer Image 1">
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h1 class="mb-4">Submit Form</h1>
         <form id="myForm">
             <div class="form-group">
                 <label for="userID">User ID:</label>
@@ -100,3 +162,4 @@
     </script>
 </body>
 </html>
+
