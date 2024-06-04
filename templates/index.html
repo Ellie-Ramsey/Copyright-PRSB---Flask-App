@@ -8,6 +8,7 @@
     <style>
         #loadingSpinner {
             display: none;
+            margin-left: 10px;
         }
     </style>
 </head>
@@ -53,9 +54,11 @@
                     <label class="form-check-label" for="Strengths and Difficulties Questionnaire (SDQ)">Strengths and Difficulties Questionnaire (SDQ)</label>
                 </div>
             </div>            
-            <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
-            <div id="loadingSpinner" class="spinner-border text-primary ml-2" role="status">
-                <span class="sr-only">Loading...</span>
+            <div class="form-group">
+                <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
+                <div id="loadingSpinner" class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
             </div>
         </form>
         <div id="resultMessage" class="mt-4"></div>
