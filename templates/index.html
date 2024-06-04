@@ -10,51 +10,47 @@
 <body>
 
     <div class="header">
-        <img src="https://via.placeholder.com/50" alt="NHS Logo">
-        <img src="https://via.placeholder.com/50" alt="PRSB Logo">
+        <img src="{{ url_for('static', filename='images/NHS.png') }}" alt="NHS Logo">
+        <img src="{{ url_for('static', filename='images/PRSB.png') }}" alt="PRSB Logo">
         <h1>Copyright Licensing Service Automation</h1>
     </div>
 
 <div class="main-content">
 
-    <div class="notice-area">
-        <h2>Notices</h2>
-        <ul>
-            <li>When automation is triggered it will draft mail but not send it.</li>
-        </ul>
-    </div>
+        <div class="notice-area">
+            <h2>Notices</h2>
+            <ul>
+                <li>When automation is triggered it will draft mail but not send it.</li>
+            </ul>
+        </div>
 
-    
-    <div class="row">
-        <div class="col-md-6">
-            <div class="status-box">
-                <h2>Automation Status</h2>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="status-box">
+                    <h2>Automation Status</h2>
 
-                
-                <!-- <div class="status-active">Active</div>
-                 -->
-                 <button type="" id="" class="btn btn-primary">Submit</button>
+                        <label class="switch">
+                            <input type="checkbox" id="toggleSwitch">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="status-text" id="statusText">Paused</span>
 
+                    <p><strong>Reminder:</strong> When paused the automation will not be triggered by content requests received. Once activated the automation will crawl the inbox for any emails with the title ‘Content Request’, please move any email you do not wish to be crawled from the inbox into the subfolder ‘Holding Emails’.</p>
+                </div>
+            </div>
 
-
-                <p><strong>Reminder:</strong> When paused the automation will not be triggered by content requests received. Once activated the automation will crawl the inbox for any emails with the title ‘Content Request’, please move any email you do not wish to be crawled from the inbox into the subfolder ‘Holding Emails’.</p>
+            <div class="col-md-6">
+                <div class="log-box">
+                    <h2>Activity Log</h2>
+                    <ul>
+                        <li>No current logs</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="log-box">
-                <h2>Activity Log</h2>
-                <ul>
-                    <li>No current logs</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="container seperator">
-        <img src="https://via.placeholder.com/20" alt="Footer Image 1">
-    </div>
-
+    <hr class="custom-divider">
 
 
 
@@ -125,41 +121,10 @@
         </form>
         <div id="resultMessage" class="mt-4"></div>
     </div>
-
-    <!-- Bootstrap JS (optional, if you need JavaScript features) -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
-    <script>
-        $(document).ready(function(){
-            $('#myForm').on('submit', function(event){
-                event.preventDefault();
-                
-                // Disable the submit button and show the loading spinner
-                $('#submitButton').prop('disabled', true);
-                $('#loadingSpinner').show();
-                
-                $.ajax({
-                    url: '/',
-                    method: 'POST',
-                    data: $(this).serialize(),
-                    success: function(response){
-                        $('#resultMessage').html('<div class="alert alert-success">' + response.message + '</div>');
-                        // Enable the submit button and hide the loading spinner
-                        $('#submitButton').prop('disabled', false);
-                        $('#loadingSpinner').hide();
-                    },
-                    error: function(){
-                        $('#resultMessage').html('<div class="alert alert-danger">There was an error submitting the form.</div>');
-                        // Enable the submit button and hide the loading spinner
-                        $('#submitButton').prop('disabled', false);
-                        $('#loadingSpinner').hide();
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>
 
