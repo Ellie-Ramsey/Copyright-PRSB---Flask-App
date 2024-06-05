@@ -27,9 +27,6 @@ $(document).ready(function(){
     });
 });
 
-
-
-
 // TOGE SWITCH CODE
 const toggleSwitch = document.getElementById('toggleSwitch');
 const statusText = document.getElementById('statusText');

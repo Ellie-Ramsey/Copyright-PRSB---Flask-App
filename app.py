@@ -13,7 +13,7 @@ def index():
        
         value = content_generation(user_id, user_email, user_name, documents_to_search)
 
-        return jsonify({'message': 'Form submitted successfully!', 'value': value})
+        return jsonify({'message': 'Sumission successful - please check the inbox for your drafted email.', 'value': value})
 
     return render_template('index.html')
 

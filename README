@@ -1,9 +1,15 @@
 Flask App for the automation of the NHS Licensing Service
 =======================================================
 
-Current Steps:
-- Add Off and On option
+CHANGES
+- switch to checking for 'completed' folder
+- tidy folders
 
 
-- Add log for triggering + behaviour
-- Add email inbox checking
+FUNCTIONS
+- find folder sorting code
+- write email deletion code
+- write email crawling code
+- set up subscription code
+- set up pause/ unpause functionality
+- add log of behaviour
