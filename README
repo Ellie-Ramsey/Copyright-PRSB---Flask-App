@@ -7,9 +7,13 @@ CHANGES
 
 
 FUNCTIONS
-- find folder sorting code
-- write email deletion code
+- add folder sorting code
+- wadd dleet folder code
 - write email crawling code
 - set up subscription code
 - set up pause/ unpause functionality
 - add log of behaviour
+
+
+- app request
+- 
