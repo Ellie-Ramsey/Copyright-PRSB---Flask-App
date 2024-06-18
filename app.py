@@ -1,7 +1,7 @@
 from main_functions import get_graph_access_token, email_content_generation, get_folder_id_by_name, move_email_to_folder, manual_content_generation
 from secret_vars import CLIENT_ID, CLIENT_SECRET, AUTHORITY
 from flask import Flask, render_template, request, jsonify
-import requests, re, html, time
+import requests, re, html, time, threading
 
 
 app = Flask(__name__)
@@ -81,6 +81,10 @@ def handle_content_requests():
     for email in requested_content_emails:
         process_requested_content_email(email)
 
+def periodic_crawl():
+    while True:
+        handle_content_requests()
+        time.sleep(900)
 
 # app routes below
 # Route 1: email notification end point
@@ -99,9 +103,18 @@ def index():
         documents_to_search = request.form.getlist('documents_to_search')
 
         value = manual_content_generation(access_token, user_id, user_email, user_name, documents_to_search)
-        return jsonify({'message': 'Submission successful - please check the inbox for your drafted email.', 'value': value})
+        
+        def delayed_crawl():
+            time.sleep(30)
+            handle_content_requests()
+        
+        threading.Thread(target=delayed_crawl).start()
+
+        return jsonify({'message': 'Submission successful - email sent. It will be sorted into the relevant organisation folder automatically.', 'value': value})
 
     return render_template('index.html')
 
+
 if __name__ == '__main__':
+    threading.Thread(target=periodic_crawl, daemon=True).start()
     app.run(host='0.0.0.0', port=8080)

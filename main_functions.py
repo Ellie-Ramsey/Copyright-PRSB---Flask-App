@@ -126,68 +126,61 @@ def manual_content_generation(access_token, user_id, user_email, user_name, docu
             print("Main - Updated douments NOT Previously Requested: ", documents_to_search)
             break
 
-    # saveAudit(user_id, documents_to_search, user_email, user_name)
+    saveAudit(user_id, documents_to_search, user_email, user_name)
 
-    # for document in documents_to_search:
-    #     DownloadFile(content_names[document] + ".docx", access_token, SITE_ID, DOCUMENT_LIBRARY_ID, RESOURCE)
+    for document in documents_to_search:
+        DownloadFile(content_names[document] + ".docx", access_token, SITE_ID, DOCUMENT_LIBRARY_ID, RESOURCE)
 
-    # for file_name in os.listdir('downloadedFiles'):
-    #     if file_name.endswith('.docx'):
-    #         WordEditingCode(user_id, file_name)
-    #         os.remove('downloadedFiles/' + file_name)
+    for file_name in os.listdir('downloadedFiles'):
+        if file_name.endswith('.docx'):
+            WordEditingCode(user_id, file_name)
+            os.remove('downloadedFiles/' + file_name)
 
 
-    # for file_name in os.listdir('downloadedFiles'):
-    #     if file_name.endswith('.docx'):
+    for file_name in os.listdir('downloadedFiles'):
+        if file_name.endswith('.docx'):
             
-    #         nhs_index = file_name.find('NHS')
-    #         if nhs_index != -1:
-    #             original_file_name = file_name[nhs_index:-5]
+            nhs_index = file_name.find('NHS')
+            if nhs_index != -1:
+                original_file_name = file_name[nhs_index:-5]
 
-    #             for key, value in content_names.items():
-    #                 if value == original_file_name:
-    #                     content_name = key
-    #                     break
+                for key, value in content_names.items():
+                    if value == original_file_name:
+                        content_name = key
+                        break
 
-    #         upload_result = upload_file_to_sharepoint(access_token, "Permissions/Completed/" + content_name + "/Sub-Licenses Granted", "downloadedFiles/" + file_name, SITE_ID, DOCUMENT_LIBRARY_ID)
-
-
-    # if documents_to_search:
-    #     print("Main - Audit was uploaded")
-    #     upload_result = upload_file_to_sharepoint(access_token, "Licensees" , "downloadedFiles/Licensee.xlsx", SITE_ID, DOCUMENT_LIBRARY_ID)
-    # else:
-    #     print("Main - Audit was not uploaded")
-    # os.remove('downloadedFiles/Licensee.xlsx')
-
-    # documents_found = [user_id + content_names[book] for book in documents_found]
-
-    # special = False
-    # for document in documents_found:
-    #     print("Downloading: ", document)
-    #     DownloadFile(document + ".docx", access_token, SITE_ID, DOCUMENT_LIBRARY_ID, RESOURCE)
-
-    #     if document == "NHS England Sub-Licence - Content Specific Terms A_ReQoL_10" or "NHS England Sub-Licence - Content Specific Terms A_ReQoL_20" and special == False:
-    #         special = True
-    #         DownloadFile("ReQoL - Important Notes.pdf", access_token, SITE_ID, DOCUMENT_LIBRARY_ID, RESOURCE)
+            upload_result = upload_file_to_sharepoint(access_token, "Permissions/Completed/" + content_name + "/Sub-Licenses Granted", "downloadedFiles/" + file_name, SITE_ID, DOCUMENT_LIBRARY_ID)
 
 
+    if documents_to_search:
+        print("Main - Audit was uploaded")
+        upload_result = upload_file_to_sharepoint(access_token, "Licensees" , "downloadedFiles/Licensee.xlsx", SITE_ID, DOCUMENT_LIBRARY_ID)
+    else:
+        print("Main - Audit was not uploaded")
+    os.remove('downloadedFiles/Licensee.xlsx')
 
-    # files = [os.path.join('downloadedFiles', file_name) for file_name in os.listdir('downloadedFiles')]
+    documents_found = [user_id + content_names[book] for book in documents_found]
 
-    # print("ATTACH IS BEING RUN")
-    # Attachment_Email_Draft('RequestedContent', files, access_token, user_email, user_id)
-    # print("ATTACH HAS BEEN RUN")
+    special = False
+    for document in documents_found:
+        print("Downloading: ", document)
+        DownloadFile(document + ".docx", access_token, SITE_ID, DOCUMENT_LIBRARY_ID, RESOURCE)
 
-    # for file_name in os.listdir('downloadedFiles'):
-    #     file_path = os.path.join('downloadedFiles', file_name)
-    #     if os.path.isfile(file_path):
-    #         os.remove(file_path)
-            
-    # folder_id = get_folder_id_by_name(access_token, user_id)
-    # print(f"Folder ID: {folder_id}")
-    # if folder_id:
-    #     move_email_to_folder(access_token, email_id, folder_id)
-    # else:
-    #     print("Folder not found.")
+        if document == "NHS England Sub-Licence - Content Specific Terms A_ReQoL_10" or "NHS England Sub-Licence - Content Specific Terms A_ReQoL_20" and special == False:
+            special = True
+            DownloadFile("ReQoL - Important Notes.pdf", access_token, SITE_ID, DOCUMENT_LIBRARY_ID, RESOURCE)
 
-    # return "Process completed successfully!"
+
+
+    files = [os.path.join('downloadedFiles', file_name) for file_name in os.listdir('downloadedFiles')]
+
+    print("ATTACH IS BEING RUN")
+    Attachment_Email_Draft('RequestedContent', files, access_token, user_email, user_id)
+    print("ATTACH HAS BEEN RUN")
+
+    for file_name in os.listdir('downloadedFiles'):
+        file_path = os.path.join('downloadedFiles', file_name)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
+    return "Process completed successfully!"
