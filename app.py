@@ -103,9 +103,9 @@ def index():
         documents_to_search = request.form.getlist('documents_to_search')
 
         value = manual_content_generation(access_token, user_id, user_email, user_name, documents_to_search)
-        
+
         def delayed_crawl():
-            time.sleep(30)
+            time.sleep(10)
             handle_content_requests()
         
         threading.Thread(target=delayed_crawl).start()
