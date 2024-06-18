@@ -25,16 +25,36 @@ $(document).ready(function(){
             }
         });
     });
-});
 
-// TOGE SWITCH CODE
-const toggleSwitch = document.getElementById('toggleSwitch');
-const statusText = document.getElementById('statusText');
+    // TOGGLE SWITCH CODE
+    const toggleSwitch = document.getElementById('toggleSwitch');
+    const statusText = document.getElementById('statusText');
 
-toggleSwitch.addEventListener('change', function() {
-    if (toggleSwitch.checked) {
-        statusText.textContent = 'Active';
-    } else {
-        statusText.textContent = 'Paused';
-    }
+    toggleSwitch.addEventListener('change', function() {
+        if (toggleSwitch.checked) {
+            statusText.textContent = 'Active';
+            $.ajax({
+                url: '/resume_automation',
+                method: 'POST',
+                success: function(response){
+                    console.log(response.message);
+                },
+                error: function(){
+                    console.error('Failed to resume automation.');
+                }
+            });
+        } else {
+            statusText.textContent = 'Paused';
+            $.ajax({
+                url: '/pause_automation',
+                method: 'POST',
+                success: function(response){
+                    console.log(response.message);
+                },
+                error: function(){
+                    console.error('Failed to pause automation.');
+                }
+            });
+        }
+    });
 });

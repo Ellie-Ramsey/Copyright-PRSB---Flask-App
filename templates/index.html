@@ -15,7 +15,7 @@
         <h1>Copyright Licensing Service Automation</h1>
     </div>
 
-<div class="main-content">
+    <div class="main-content">
         <div class="notice-area">
             <h2>Notices</h2>
             <ul>
@@ -25,18 +25,15 @@
             </ul>
         </div>
 
-        
         <div class="row">
             <div class="col-md-6">
                 <div class="status-box">
                     <h2>Automation Status</h2>
-
-                        <label class="switch">
-                            <input type="checkbox" id="toggleSwitch">
-                            <span class="slider"></span>
-                        </label>
-                        <span class="status-text" id="statusText">Paused</span>
-
+                    <label class="switch">
+                        <input type="checkbox" id="toggleSwitch" data-toggle="toggleSwitch">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="status-text" id="statusText">Paused</span>
                     <p><strong>Reminder:</strong> When paused the automation will not be triggered by content requests received. Once activated the automation will crawl the inbox for any emails with the title ‘Content Request’, please move any email you do not wish to be crawled from the inbox into the subfolder ‘Holding Emails’.</p>
                 </div>
             </div>
@@ -51,11 +48,10 @@
             </div>
         </div>
 
-    <hr class="custom-divider">
+        <hr class="custom-divider">
 
-    <div class="form-area">
-
-        <h1 class="mb-4">Submit Form</h1>
+        <div class="form-area" id="formContainer">
+            <h1 class="mb-4">Submit Form</h1>
             <form id="myForm">
                 <div class="form-group">
                     <label for="userID">User ID:</label>
@@ -103,12 +99,12 @@
                 </div>
             </form>
             <div id="resultMessage" class="mt-4"></div>
+        </div>
     </div>
-    </div>
+
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>
-

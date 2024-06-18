@@ -1,8 +1,7 @@
+from flask import Flask, render_template, request, jsonify
 from main_functions import get_graph_access_token, email_content_generation, get_folder_id_by_name, move_email_to_folder, manual_content_generation
 from secret_vars import CLIENT_ID, CLIENT_SECRET, AUTHORITY
-from flask import Flask, render_template, request, jsonify
 import requests, re, html, time, threading
-
 
 app = Flask(__name__)
 access_token = get_graph_access_token(CLIENT_ID, CLIENT_SECRET, AUTHORITY)
@@ -11,6 +10,9 @@ headers = {
     'Authorization': f'Bearer {access_token}',
     'Content-Type': 'application/json'
 }
+
+# Define a shared state variable for controlling the automation pause
+automation_paused = threading.Event()
 
 def get_emails_with_subject_pattern(subject_pattern):
     url = f"https://graph.microsoft.com/v1.0/users/{user_email}/mailFolders/inbox/messages"
@@ -69,6 +71,11 @@ def process_requested_content_email(email):
             print(f"Folder '{folder_name}' not found.")
 
 def handle_content_requests():
+    # Check if automation is paused
+    if automation_paused.is_set():
+        print("Automation is paused. Skipping content request handling.")
+        return
+    
     content_request_pattern = r'Content Request'
     requested_content_pattern = r'Requested Content - .+'
     
@@ -81,19 +88,16 @@ def handle_content_requests():
     for email in requested_content_emails:
         process_requested_content_email(email)
 
-def periodic_crawl():
-    while True:
-        handle_content_requests()
-        time.sleep(900)
-
-# app routes below
-# Route 1: email notification end point
+# Route to handle email notifications
 @app.route('/notifications', methods=['POST'])
 def notifications():
-    handle_content_requests()
+    if not automation_paused.is_set():
+        handle_content_requests()
+    else:
+        print("Automation is paused. Notification handling is skipped.")
     return jsonify({'message': 'Notification received'}), 202
 
-# Route 2: main page
+# Route to handle the manual form submission
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -104,17 +108,40 @@ def index():
 
         value = manual_content_generation(access_token, user_id, user_email, user_name, documents_to_search)
 
+        # Start a background thread to crawl the inbox after a delay
         def delayed_crawl():
-            time.sleep(10)
-            handle_content_requests()
+            time.sleep(30)
+            if not automation_paused.is_set():
+                handle_content_requests()
+            else:
+                print("Automation is paused. Delayed crawl is skipped.")
         
         threading.Thread(target=delayed_crawl).start()
 
-        return jsonify({'message': 'Submission successful - email sent. It will be sorted into the relevant organisation folder automatically.', 'value': value})
+        return jsonify({'message': 'Submission successful - please check the inbox for your drafted email.', 'value': value})
 
     return render_template('index.html')
 
+# Route to pause the automation
+@app.route('/pause_automation', methods=['POST'])
+def pause_automation():
+    automation_paused.set()
+    return jsonify({'message': 'Automation paused'}), 200
+
+# Route to resume the automation
+@app.route('/resume_automation', methods=['POST'])
+def resume_automation():
+    automation_paused.clear()
+    return jsonify({'message': 'Automation resumed'}), 200
+
+# Periodically crawl the inbox every 15 minutes
+def periodic_crawl():
+    while True:
+        if not automation_paused.is_set():
+            handle_content_requests()
+        time.sleep(900)
 
 if __name__ == '__main__':
+    # Start the background thread for periodic crawling
     threading.Thread(target=periodic_crawl, daemon=True).start()
     app.run(host='0.0.0.0', port=8080)
