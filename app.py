@@ -11,8 +11,9 @@ headers = {
     'Content-Type': 'application/json'
 }
 
-# Define a shared state variable for controlling the automation pause
+# Define state variables for controlling the automation
 automation_paused = threading.Event()
+automation_running = threading.Event()
 
 def get_emails_with_subject_pattern(subject_pattern):
     url = f"https://graph.microsoft.com/v1.0/users/{user_email}/mailFolders/inbox/messages"
@@ -75,7 +76,10 @@ def handle_content_requests():
     if automation_paused.is_set():
         print("Automation is paused. Skipping content request handling.")
         return
-    
+
+    # Set automation running state
+    automation_running.set()
+
     content_request_pattern = r'Content Request'
     requested_content_pattern = r'Requested Content - .+'
     
@@ -83,10 +87,19 @@ def handle_content_requests():
     requested_content_emails = get_emails_with_subject_pattern(requested_content_pattern)
     
     for email in content_request_emails:
+        if automation_paused.is_set():
+            print("Automation paused during processing. Exiting...")
+            break
         process_content_request_email(email)
     
     for email in requested_content_emails:
+        if automation_paused.is_set():
+            print("Automation paused during processing. Exiting...")
+            break
         process_requested_content_email(email)
+
+    # Clear automation running state
+    automation_running.clear()
 
 # Route to handle email notifications
 @app.route('/notifications', methods=['POST'])
@@ -125,8 +138,13 @@ def index():
 # Route to pause the automation
 @app.route('/pause_automation', methods=['POST'])
 def pause_automation():
-    automation_paused.set()
-    return jsonify({'message': 'Automation paused'}), 200
+    if automation_running.is_set():
+        message = "Automation is currently running. It will be paused as soon as possible."
+    else:
+        automation_paused.set()
+        message = "Automation paused."
+
+    return jsonify({'message': message}), 200
 
 # Route to resume the automation
 @app.route('/resume_automation', methods=['POST'])
@@ -139,8 +157,9 @@ def periodic_crawl():
     while True:
         if not automation_paused.is_set():
             handle_content_requests()
-        time.sleep(900)
+        time.sleep(900)  # Sleep for 900 seconds (15 minutes)
 
 if __name__ == '__main__':
+    # Start the background thread for periodic crawling
     threading.Thread(target=periodic_crawl, daemon=True).start()
     app.run(host='0.0.0.0', port=8080)
