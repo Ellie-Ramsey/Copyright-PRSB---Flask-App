@@ -142,6 +142,5 @@ def periodic_crawl():
         time.sleep(900)
 
 if __name__ == '__main__':
-    # Start the background thread for periodic crawling
     threading.Thread(target=periodic_crawl, daemon=True).start()
     app.run(host='0.0.0.0', port=8080)
